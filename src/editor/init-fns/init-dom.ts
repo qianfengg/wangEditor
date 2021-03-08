@@ -71,8 +71,8 @@ export default function (editor: Editor): void {
         $textElem.append($('<p><br></p>')) // 新增一行，方便继续编辑
     }
 
+    // 菜单分离后，文本区域有标签的带入编辑器内
     if ($subChildren && $subChildren.length) {
-        console.log($subChildren)
         $textElem.append($subChildren)
         // 编辑器有默认值的时候隐藏placeholder
         $placeholder.hide()

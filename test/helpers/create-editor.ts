@@ -17,11 +17,8 @@ function createEditor(
     toolbarId: string,
     textId?: string,
     config?: any,
-    wrapText?: string
+    htmlStr?: string
 ): Editor {
-    if (wrapText) {
-        $('body').append($(wrapText))
-    }
     const toolbarElem = document.createElement('div')
     toolbarElem.id = toolbarId
     $('body').append($(toolbarElem))
@@ -32,6 +29,9 @@ function createEditor(
         const textElem = document.createElement('div')
         textElem.id = textId
         $('body').append($(textElem))
+        if (htmlStr) {
+            textElem.innerHTML = htmlStr
+        }
         editor = new Editor(`#${toolbarId}`, `#${textId}`)
     } else {
         editor = new Editor(`#${toolbarId}`)
