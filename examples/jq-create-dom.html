@@ -12,7 +12,6 @@
     <h1>jq create dom</h1>
     <div class="wangEditor">
         <p>加了p标签的内容</p>
-        尝试重现错误，是不是在编辑区域外，这行字不在任何标签内
         <div>在写个div测试下</div>
     </div>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -36,11 +35,9 @@
             }
             $(toolbar).appendTo(editorAreaDOM);
             $(textContent).appendTo(editorAreaDOM);
+            $(editorArea).html(`<p>测试</p>`)
             E = window.wangEditor;
-            // console.log('初始化时传的参数', { editorToolbar, editorArea })
-            editor = new E(editorToolbar, editorArea); // 如果不传入editorToolbar时,正常.
-            // editor = new E(editorArea); // 如果不传入editorToolbar时,正常.
-            // editor = new E('.wangEditor'); // 如果不传入editorToolbar时,正常.
+            editor = new E(editorToolbar, editorArea);
             editor.config.placeholder = '这里是我加的placeholder';
             editor.config.zIndex = 10;
             editor.config.uploadVideoServer = '/api/upload-video';

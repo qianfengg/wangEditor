@@ -26,7 +26,7 @@ export default function (editor: Editor): void {
     const $textContainerElem: DomElement = $('<div></div>')
     let $textElem: DomElement
     let $children: DomElement | null
-    let $wrap: DomElement | null = null
+    let $subChildren: DomElement | null = null
 
     if (textSelector == null) {
         // 将编辑器区域原有的内容，暂存起来
@@ -47,11 +47,11 @@ export default function (editor: Editor): void {
     } else {
         // toolbarSelector 和 textSelector 都有
         $toolbarSelector.append($toolbarElem)
+        // 菜单分离后，文本区域内容暂存
+        $subChildren = $(textSelector).children()
         $(textSelector).append($textContainerElem)
         // 将编辑器区域原有的内容，暂存起来
         $children = $textContainerElem.children()
-        // 菜单编辑区域分离，包裹他们的容器中，可能会有用户定义的初始化内容，先暂存起来
-        $wrap = $toolbarSelector.parent()
     }
 
     // 编辑区域
@@ -62,27 +62,6 @@ export default function (editor: Editor): void {
     const $placeholder = $(`<div>${i18next.t(editor.config.placeholder)}</div>`)
     $placeholder.addClass('placeholder')
 
-    // 处理菜单和编辑区域分离，用户在父容器设置自定义内容
-    if (textSelector !== null && $wrap && $wrap.text()) {
-        // 获取用户自定义的内容，根据换行切割
-        $wrap
-            .text()
-            .split('\n')
-            .forEach(text => {
-                text.trim() && $textElem.append($(`<p>${text}<br></p>`))
-            })
-        // 移除多余内容，只保留toolbar 和 text
-        $wrap
-            .childNodes()
-            ?.elems.slice(0, -2)
-            .forEach(el => {
-                el.nodeType === 3 && (el.textContent = '')
-                $(el).remove()
-            })
-        // 编辑器有默认值的时候隐藏placeholder
-        $placeholder.hide()
-    }
-
     // 初始化编辑区域内容
     if ($children && $children.length) {
         $textElem.append($children)
@@ -90,6 +69,13 @@ export default function (editor: Editor): void {
         $placeholder.hide()
     } else {
         $textElem.append($('<p><br></p>')) // 新增一行，方便继续编辑
+    }
+
+    if ($subChildren && $subChildren.length) {
+        console.log($subChildren)
+        $textElem.append($subChildren)
+        // 编辑器有默认值的时候隐藏placeholder
+        $placeholder.hide()
     }
 
     // 编辑区域加入DOM
